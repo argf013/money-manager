@@ -45,7 +45,7 @@ export default [
     },
 
     rules: {
-      'no-console': 'error',
+      'no-console': ['error', { allow: ['warn', 'error'] }],
       'react/react-in-jsx-scope': 'off',
       'no-duplicate-imports': 'error',
 
