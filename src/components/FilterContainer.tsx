@@ -6,8 +6,8 @@ import {
   FilterIcon,
   TasklistIcon,
 } from '@primer/octicons-react';
-import { Dropdown } from 'flowbite-react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface FilterContainerProps {
   onSearch: (query: string) => void;
@@ -19,6 +19,7 @@ const FilterContainer = ({
   onFilterChange,
 }: FilterContainerProps) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -27,6 +28,11 @@ const FilterContainer = ({
 
   const handleFilterChange = (filter: string) => {
     onFilterChange(filter);
+    setDropdownOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
@@ -38,33 +44,45 @@ const FilterContainer = ({
         onChange={handleSearchChange}
         className='text-[13px] rounded-full px-[17px] py-[9px] w-full border border-[#C2C2C2] focus:outline-[#17A364]'
       />
-      <div className='flex flex-row gap-[15px]'>
-        <Dropdown
-          label={<FilterIcon size={24} className='text-[#797C7B]' />}
-          dismissOnClick={true}
-          inline
-          arrowIcon={false}
-          placement='bottom-end'
-        >
-          <Dropdown.Item onClick={() => handleFilterChange('Show All')}>
-            <div className='flex items-center gap-2 text-sm'>
-              <EyeIcon />
-              Show All
-            </div>
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleFilterChange('Category')}>
-            <div className='flex items-center gap-2 text-sm'>
-              <TasklistIcon />
-              Category
-            </div>
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleFilterChange('Price')}>
-            <div className='flex items-center gap-2 text-sm'>
-              <CreditCardIcon />
-              Price
-            </div>
-          </Dropdown.Item>
-        </Dropdown>
+      <div className='flex flex-row gap-[15px] relative'>
+        <button onClick={toggleDropdown}>
+          <FilterIcon size={24} className='text-[#797C7B]' />
+        </button>
+        <AnimatePresence>
+          {dropdownOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className='absolute right-0 mt-10 w-[160px] bg-white text-[#494949] rounded-lg shadow-lg'
+            >
+              <div className='flex flex-col'>
+                <button
+                  onClick={() => handleFilterChange('Show All')}
+                  className='flex items-center gap-2 text-sm px-4 py-2 hover:bg-gray-100'
+                >
+                  <EyeIcon />
+                  Show All
+                </button>
+                <button
+                  onClick={() => handleFilterChange('Category')}
+                  className='flex items-center gap-2 text-sm px-4 py-2 hover:bg-gray-100'
+                >
+                  <TasklistIcon />
+                  Category
+                </button>
+                <button
+                  onClick={() => handleFilterChange('Price')}
+                  className='flex items-center gap-2 text-sm px-4 py-2 hover:bg-gray-100'
+                >
+                  <CreditCardIcon />
+                  Price
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Link to={'/history'}>
           <CalendarIcon size={24} className='text-[#797C7B]' />
         </Link>

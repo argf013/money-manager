@@ -7,32 +7,8 @@ import {
 } from '@primer/octicons-react';
 import DialogForm from './DialogForm';
 import IndexedDBService from '../service';
-
-interface Income {
-  transactionId: number;
-  transactionName: string;
-  date: string;
-  transactionAmount: number;
-  category: string;
-  type: 'income';
-}
-
-interface Transaction {
-  transactionId: number;
-  transactionName: string;
-  date: string;
-  transactionAmount: number;
-  category: string;
-  type: 'expense';
-}
-
-interface DailyExpense {
-  expenseId: number;
-  name: string;
-  category: string;
-  time: string;
-  amount: number;
-}
+import { Income, Transaction, DailyExpense } from '../types/transactions';
+import { useDialog } from '../context/DialogContext';
 
 const IconButton = ({
   icon: Icon,
@@ -61,18 +37,18 @@ const ButtonContainer = ({
   setBalance: (balance: number) => void;
   onTransactionAdded: () => void;
 }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { setIsVisible } = useDialog();
   const [dialogType, setDialogType] = useState<'expense' | 'income' | 'daily'>(
     'expense',
   );
 
   const handleOpenDialog = (type: 'expense' | 'income' | 'daily') => {
     setDialogType(type);
-    setIsDialogOpen(true);
+    setIsVisible(true);
   };
 
   const handleCloseDialog = () => {
-    setIsDialogOpen(false);
+    setIsVisible(false);
   };
 
   const handleSave = (name?: string, amount?: number, category?: string) => {
@@ -138,7 +114,7 @@ const ButtonContainer = ({
         });
     }
 
-    setIsDialogOpen(false);
+    setIsVisible(false);
   };
 
   return (
@@ -161,13 +137,11 @@ const ButtonContainer = ({
         />
         <IconButton icon={ChecklistIcon} label='Export' />
       </div>
-      {isDialogOpen && (
-        <DialogForm
-          onSave={handleSave}
-          onCancel={handleCloseDialog}
-          type={dialogType}
-        />
-      )}
+      <DialogForm
+        onSave={handleSave}
+        onCancel={handleCloseDialog}
+        type={dialogType}
+      />
     </div>
   );
 };
