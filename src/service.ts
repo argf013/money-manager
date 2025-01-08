@@ -1,4 +1,11 @@
 import { openDB, IDBPDatabase } from 'idb';
+import {
+  Transaction,
+  Balance,
+  Action,
+  DailyExpense,
+  Income,
+} from './types/transactions';
 
 const DB_NAME = 'money-manager-db';
 const DB_VERSION = 2;
@@ -6,47 +13,6 @@ const TRANSACTION_STORE = 'transactions';
 const ACTION_STORE = 'actions';
 const EXPENSE_STORE = 'dailyExpenses';
 const BALANCE_STORE = 'balance';
-
-interface Transaction {
-  transactionId: number;
-  transactionName: string;
-  date: string;
-  transactionAmount: number;
-  category: string;
-  type: 'expense';
-}
-
-interface Income {
-  transactionId: number;
-  transactionName: string;
-  date: string;
-  transactionAmount: number;
-  category: string;
-  type: 'income';
-}
-
-interface Action {
-  actionId: number;
-  date: string;
-  action: string;
-  detail: string;
-  from: string;
-  to: string;
-}
-
-interface DailyExpense {
-  expenseId: number;
-  name: string;
-  category: string;
-  time: string;
-  amount: number;
-}
-
-interface Balance {
-  id: string;
-  balance: number;
-  detail: string;
-}
 
 const dbPromise: Promise<IDBPDatabase<unknown>> = openDB(DB_NAME, DB_VERSION, {
   upgrade(db: IDBPDatabase<unknown>, oldVersion) {
