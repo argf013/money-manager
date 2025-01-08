@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import BalanceCard from './components/BalanceCard';
 import ButtonContainer from './components/ButtonContainer';
 import FilterContainer from './components/FilterContainer';
@@ -8,15 +9,8 @@ import Navbar from './components/Navbar';
 import IndexedDBService from './service';
 import './App.css';
 import History from './pages/History';
-
-interface Action {
-  actionId: number;
-  date: string;
-  action: string;
-  detail: string;
-  from: string;
-  to: string;
-}
+import { Action } from './types/transactions';
+import { DialogProvider } from './context/DialogContext';
 
 const App = () => {
   const [balance, setBalance] = useState(0);
@@ -62,43 +56,47 @@ const App = () => {
   }, []);
 
   return (
-    <Router>
-      <div className='max-w-[413px] mx-auto bg-white min-h-screen'>
-        <Navbar notifications={notifications} />
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <>
-                <BalanceCard
-                  balance={balance}
-                  setBalance={setBalance}
-                  setNotifications={setNotifications}
-                  notifications={notifications}
-                />
-                <ButtonContainer
-                  setBalance={setBalance}
-                  onTransactionAdded={handleTransactionAdded}
-                />
-                <h1 className='text-xl font-bold pt-[20px] pb-[15px] text-center text-[#17A364] border-[#17A364] border-t border-dashed'>
-                  History
-                </h1>
-                <FilterContainer
-                  onSearch={handleSearch}
-                  onFilterChange={handleFilterChange}
-                />
-                <TransactionLists
-                  refresh={refresh}
-                  searchQuery={searchQuery}
-                  filter={filter}
-                />
-              </>
-            }
-          />
-          <Route path='/history' element={<History />} />
-        </Routes>
-      </div>
-    </Router>
+    <DialogProvider>
+      <Router>
+        <div className='max-w-[413px] mx-auto bg-white min-h-screen'>
+          <Navbar notifications={notifications} />
+          <AnimatePresence>
+            <Routes>
+              <Route
+                path='/'
+                element={
+                  <>
+                    <BalanceCard
+                      balance={balance}
+                      setBalance={setBalance}
+                      setNotifications={setNotifications}
+                      notifications={notifications}
+                    />
+                    <ButtonContainer
+                      setBalance={setBalance}
+                      onTransactionAdded={handleTransactionAdded}
+                    />
+                    <h1 className='text-xl font-bold pt-[20px] pb-[15px] text-center text-[#17A364] border-[#17A364] border-t border-dashed'>
+                      History
+                    </h1>
+                    <FilterContainer
+                      onSearch={handleSearch}
+                      onFilterChange={handleFilterChange}
+                    />
+                    <TransactionLists
+                      refresh={refresh}
+                      searchQuery={searchQuery}
+                      filter={filter}
+                    />
+                  </>
+                }
+              />
+              <Route path='/history' element={<History />} />
+            </Routes>
+          </AnimatePresence>
+        </div>
+      </Router>
+    </DialogProvider>
   );
 };
 
