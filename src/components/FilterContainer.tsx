@@ -42,11 +42,14 @@ const FilterContainer = ({
         placeholder='Search...'
         value={searchQuery}
         onChange={handleSearchChange}
-        className='text-[13px] rounded-full px-[17px] py-[9px] w-full border border-[#C2C2C2] focus:outline-[#17A364]'
+        className='text-[13px] rounded-full px-[17px] py-[9px] w-full border border-[#C2C2C2] focus:ring-[#15BC70] focus:border-[#15BC70]'
       />
       <div className='flex flex-row gap-[15px] relative'>
         <button onClick={toggleDropdown}>
-          <FilterIcon size={24} className='text-[#797C7B]' />
+          <FilterIcon
+            size={24}
+            className='text-[#797C7B] hover:text-[#373838]'
+          />
         </button>
         <AnimatePresence>
           {dropdownOpen && (
@@ -84,7 +87,10 @@ const FilterContainer = ({
           )}
         </AnimatePresence>
         <Link to={'/history'}>
-          <CalendarIcon size={24} className='text-[#797C7B]' />
+          <CalendarIcon
+            size={24}
+            className='text-[#797C7B] hover:text-[#373838]'
+          />
         </Link>
       </div>
     </div>

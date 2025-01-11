@@ -5,6 +5,7 @@ export interface Action {
   detail: string;
   from: string;
   to: string;
+  balance?: number;
 }
 
 export interface Transaction {

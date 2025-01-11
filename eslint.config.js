@@ -48,6 +48,7 @@ export default [
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'react/react-in-jsx-scope': 'off',
       'no-duplicate-imports': 'error',
+      'react/prop-types': 'off',
 
       '@typescript-eslint/no-unused-vars': [
         'error',

@@ -178,11 +178,11 @@ const IndexedDBService = {
     });
   },
 
-  deleteAction(id: number): Promise<void> {
+  deleteAllActions(): Promise<void> {
     return dbPromise.then((db: IDBPDatabase<unknown>) => {
       const tx = db.transaction(ACTION_STORE, 'readwrite');
       const store = tx.objectStore(ACTION_STORE);
-      store.delete(id);
+      store.clear();
       return tx.done;
     });
   },

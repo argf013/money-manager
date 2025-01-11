@@ -1,5 +1,5 @@
+import React, { useEffect, useState, useRef } from 'react';
 import { PencilIcon } from '@primer/octicons-react';
-import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDialog } from '../context/DialogContext';
 
@@ -9,30 +9,63 @@ interface DialogFormProps {
     amount?: number,
     category?: string,
     detail?: string,
+    payDayDate?: number,
   ) => void;
   onCancel: () => void;
-  type: 'expense' | 'income' | 'daily' | 'balance';
   initialName?: string;
   initialAmount?: number;
   initialCategory?: string;
   initialDetail?: string;
+  initialPayDayDate?: number;
 }
 
 const DialogForm: React.FC<DialogFormProps> = ({
   onSave,
   onCancel,
-  type,
   initialName = '',
   initialAmount = 0,
   initialCategory = '',
   initialDetail = '',
+  initialPayDayDate = 0,
 }) => {
-  const { isVisible, setIsVisible } = useDialog();
+  const { isVisible, setIsVisible, type } = useDialog();
   const [name, setName] = useState(initialName);
   const [amount, setAmount] = useState(initialAmount);
   const [category, setCategory] = useState(initialCategory);
   const [detail, setDetail] = useState(initialDetail);
+  const [payDayDate, setPayDayDate] = useState(initialPayDayDate);
   const [isDetailValid, setIsDetailValid] = useState(true);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const payDayDateSession = sessionStorage.getItem('payDayDate');
+
+  useEffect(() => {
+    setAmount(initialAmount);
+  }, [initialAmount]);
+
+  useEffect(() => {
+    if (payDayDateSession) {
+      setPayDayDate(parseInt(payDayDateSession));
+    }
+  }, [payDayDateSession, initialPayDayDate, initialAmount]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCancel();
+        setIsVisible(false);
+      }
+    };
+
+    if (isVisible) {
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isVisible, onCancel, setIsVisible]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,20 +73,37 @@ const DialogForm: React.FC<DialogFormProps> = ({
       setIsDetailValid(false);
       return;
     }
-    onSave(name, amount, category, detail);
+    onSave(name, amount, category, detail, payDayDate);
+    setName(initialName);
+    setAmount(initialAmount);
+    setCategory(initialCategory);
+    setDetail(initialDetail);
+    setPayDayDate(initialPayDayDate);
+    setIsDetailValid(true);
+    event.currentTarget.reset();
+    setPayDayDate(parseInt(payDayDateSession as string));
   };
 
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className='fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-10 z-50'>
+        <div
+          ref={dialogRef}
+          className='fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-10 z-50'
+          onClick={(event) => {
+            if (event.target === dialogRef.current) {
+              onCancel();
+              setIsVisible(false);
+            }
+          }}
+        >
           <motion.div
-            key={type}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.3 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className='min-w-[353px] bg-white rounded-lg shadow-lg px-[25px] py-[28px] flex flex-col gap-[18px]'
+            onClick={(e) => e.stopPropagation()}
           >
             <div className='flex items-center gap-2 font-bold text-[#15BC70]'>
               <PencilIcon />
@@ -66,6 +116,8 @@ const DialogForm: React.FC<DialogFormProps> = ({
                   ? 'Set Daily'
                   : type === 'balance'
                   ? 'Edit Balance'
+                  : type === 'payDayDate'
+                  ? 'Set Date'
                   : 'no'}
               </h1>
             </div>
@@ -143,6 +195,22 @@ const DialogForm: React.FC<DialogFormProps> = ({
                   <span className='text-red-500'>
                     {isDetailValid ? '' : 'Detail is required'}
                   </span>
+                </>
+              )}
+              {type === 'payDayDate' && (
+                <>
+                  <label htmlFor='payDayDate' className='text-[#444444]'>
+                    Select Date:
+                  </label>
+                  <input
+                    className='border rounded-md border-[#C2C2C2] px-[14px] py-[11px] h-[38px] !text-black'
+                    name='payDayDate'
+                    type='number'
+                    value={payDayDate}
+                    min={1}
+                    max={31}
+                    onChange={(e) => setPayDayDate(parseInt(e.target.value))}
+                  />
                 </>
               )}
               <div className='flex justify-end space-x-2 mt-5'>
