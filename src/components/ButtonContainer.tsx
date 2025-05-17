@@ -11,6 +11,7 @@ import IndexedDBService from '../service';
 import { Income, Transaction, DailyExpense } from '../types/transactions';
 import { useDialog } from '../context/DialogContext';
 import Dialog from './Dialog';
+import jsPDF from 'jspdf';
 
 const IconButton = ({
   icon: Icon,
@@ -87,6 +88,73 @@ const ButtonContainer = ({
 
   const handleOpenDailyDialog = () => {
     showDialog();
+  };
+
+  const handleExport = async () => {
+    const transactions = await IndexedDBService.getAllTransactions();
+    const doc = new jsPDF();
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+
+    const dates = transactions.map((transaction) => new Date(transaction.date));
+    const startDate = new Date(
+      Math.min(...dates.map((date) => date.getTime())),
+    );
+    const endDate = new Date(Math.max(...dates.map((date) => date.getTime())));
+
+    const formattedStartDate = startDate.toLocaleDateString('id-ID');
+    const formattedEndDate = endDate.toLocaleDateString('id-ID');
+
+    doc.text(
+      `Transaction Report from ${formattedStartDate} to ${formattedEndDate}`,
+      10,
+      10,
+    );
+
+    doc.setFontSize(10);
+    doc.text('No', 10, 20);
+    doc.text('Category', 30, 20);
+    doc.text('Transaction Name', 60, 20);
+    doc.text('Amount', 120, 20);
+    doc.text('Date', 160, 20);
+
+    doc.line(10, 22, 200, 22);
+
+    let totalAmount = 0;
+
+    transactions.forEach((transaction, index) => {
+      const rowY = 30 + index * 10;
+      doc.text((index + 1).toString(), 10, rowY);
+      doc.text(transaction.category, 30, rowY);
+      doc.text(transaction.transactionName, 60, rowY);
+
+      const formattedAmount = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+      }).format(transaction.transactionAmount);
+      doc.text(formattedAmount, 120, rowY);
+
+      const formattedDate = new Date(transaction.date).toLocaleDateString(
+        'id-ID',
+      );
+      doc.text(formattedDate, 160, rowY);
+
+      totalAmount += transaction.transactionAmount;
+    });
+    doc.line(
+      10,
+      30 + transactions.length * 10,
+      200,
+      30 + transactions.length * 10,
+    );
+    const totalFormatted = new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    }).format(totalAmount);
+    doc.text('Total:', 120, 30 + transactions.length * 10 + 10);
+    doc.text(totalFormatted, 160, 30 + transactions.length * 10 + 10);
+    doc.save('transactions.pdf');
   };
 
   useEffect(() => {
@@ -233,7 +301,7 @@ const ButtonContainer = ({
     } else if (type === 'payDayDate') {
       if (payDayDate) {
         setPayDayDate(payDayDate);
-        sessionStorage.setItem('payDayDate', payDayDate.toString());
+        localStorage.setItem('payDayDate', payDayDate.toString());
       }
     }
 
@@ -273,6 +341,7 @@ const ButtonContainer = ({
           payDayDate={payDayDate}
           icon={ChecklistIcon}
           label='Export'
+          onClick={handleExport}
         />
         <IconButton
           balance={balance}

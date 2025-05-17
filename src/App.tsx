@@ -16,8 +16,8 @@ const App = () => {
   const [balance, setBalance] = useState(0);
   const [surplus, setSurplus] = useState(0);
   const [payDayDate, setPayDayDate] = useState(
-    sessionStorage.getItem('payDayDate')
-      ? parseInt(sessionStorage.getItem('payDayDate') as string)
+    localStorage.getItem('payDayDate')
+      ? parseInt(localStorage.getItem('payDayDate') as string)
       : 0,
   );
   const [refresh, setRefresh] = useState(false);
@@ -122,7 +122,7 @@ const App = () => {
   return (
     <DialogProvider>
       <Router>
-        <div className='max-w-[413px] mx-auto bg-white min-h-screen'>
+        <div className='max-w-[600px] mx-auto bg-white min-h-screen'>
           <Navbar
             setNotifications={setNotifications}
             notifications={notifications}

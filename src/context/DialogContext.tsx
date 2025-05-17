@@ -1,21 +1,15 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
+type DialogType = 'expense' | 'income' | 'daily' | 'balance' | 'payDayDate';
+
 interface DialogContextProps {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
-  type: DialogTypes[keyof DialogTypes];
-  setType: (type: DialogTypes[keyof DialogTypes]) => void;
+  type: DialogType;
+  setType: (type: DialogType) => void;
   isDialogVisible: boolean;
   showDialog: () => void;
   hideDialog: () => void;
-}
-
-interface DialogTypes {
-  expense: 'expense';
-  income: 'income';
-  daily: 'daily';
-  balance: 'balance';
-  payDayDate: 'payDayDate';
 }
 
 const DialogContext = createContext<DialogContextProps | undefined>(undefined);
@@ -24,7 +18,7 @@ export const DialogProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [type, setType] = useState<DialogTypes[keyof DialogTypes]>('expense');
+  const [type, setType] = useState<DialogType>('expense');
   const [isDialogVisible, setIsDialogVisible] = useState(false);
 
   const showDialog = () => setIsDialogVisible(true);
