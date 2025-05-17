@@ -44,7 +44,7 @@ const IconButton = ({
       >
         <Icon size={20} />
       </button>
-      <div className="w-full min-h-[36px] flex items-center justify-center px-1" title={label}>
+      <div className="w-full min-h-[36px] flex items-start justify-center px-1" title={label}>
         <span className={`font-medium text-sm text-[${buttonColor}] text-center`}>
           {label}
         </span>
@@ -312,7 +312,7 @@ const ButtonContainer = ({
 
   return (
     <div className='flex flex-col items-center'>
-      <div className='grid grid-cols-4 gap-4 px-5 py-7'>
+      <div className='grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 gap-4 px-5 py-7'>
         <IconButton
           balance={balance}
           surplus={surplus}
@@ -334,7 +334,7 @@ const ButtonContainer = ({
           surplus={surplus}
           payDayDate={payDayDate}
           icon={SunIcon}
-          label='Set Daily Expenses'
+          label='Daily Expenses'
           onClick={() => handleOpenDialog('daily')}
         />
         <IconButton
@@ -350,7 +350,7 @@ const ButtonContainer = ({
           surplus={surplus}
           payDayDate={payDayDate}
           icon={ChecklistIcon}
-          label='Daily Expenses'
+          label='View Daily'
           onClick={handleOpenDailyDialog}
         />
         <IconButton
