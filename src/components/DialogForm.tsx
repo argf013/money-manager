@@ -36,17 +36,17 @@ const DialogForm: React.FC<DialogFormProps> = ({
   const [payDayDate, setPayDayDate] = useState(initialPayDayDate);
   const [isDetailValid, setIsDetailValid] = useState(true);
   const dialogRef = useRef<HTMLDivElement>(null);
-  const payDayDateSession = sessionStorage.getItem('payDayDate');
+  const payDayDateLocal = localStorage.getItem('payDayDate');
 
   useEffect(() => {
     setAmount(initialAmount);
   }, [initialAmount]);
 
   useEffect(() => {
-    if (payDayDateSession) {
-      setPayDayDate(parseInt(payDayDateSession));
+    if (payDayDateLocal) {
+      setPayDayDate(parseInt(payDayDateLocal));
     }
-  }, [payDayDateSession, initialPayDayDate, initialAmount]);
+  }, [payDayDateLocal, initialPayDayDate, initialAmount]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -81,7 +81,7 @@ const DialogForm: React.FC<DialogFormProps> = ({
     setPayDayDate(initialPayDayDate);
     setIsDetailValid(true);
     event.currentTarget.reset();
-    setPayDayDate(parseInt(payDayDateSession as string));
+    localStorage.setItem('payDayDate', payDayDate.toString());
   };
 
   return (
