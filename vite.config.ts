@@ -29,11 +29,11 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
-      strategies: 'injectManifest',
-      injectManifest: {
-        swSrc: './src/service-worker.ts',
-        swDest: 'service-worker.js',
-      },
+      // strategies: 'injectManifest',
+      // injectManifest: {
+      //   swSrc: './src/service-worker.ts',
+      //   swDest: 'service-worker.js',
+      // },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
       },
