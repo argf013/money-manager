@@ -44,9 +44,11 @@ const IconButton = ({
       >
         <Icon size={20} />
       </button>
-      <span className={`font-medium text-sm text-[${buttonColor}]`}>
-        {label}
-      </span>
+      <div className="w-full min-h-[36px] flex items-center justify-center px-1" title={label}>
+        <span className={`font-medium text-sm text-[${buttonColor}] text-center`}>
+          {label}
+        </span>
+      </div>
     </div>
   );
 };
@@ -310,13 +312,13 @@ const ButtonContainer = ({
 
   return (
     <div className='flex flex-col items-center'>
-      <div className='grid grid-cols-4 gap-6 px-5 py-7'>
+      <div className='grid grid-cols-4 gap-4 px-5 py-7'>
         <IconButton
           balance={balance}
           surplus={surplus}
           payDayDate={payDayDate}
           icon={UploadIcon}
-          label='Expense'
+          label='Add Expense'
           onClick={() => handleOpenDialog('expense')}
         />
         <IconButton
@@ -324,7 +326,7 @@ const ButtonContainer = ({
           surplus={surplus}
           payDayDate={payDayDate}
           icon={DownloadIcon}
-          label='Income'
+          label='Add Income'
           onClick={() => handleOpenDialog('income')}
         />
         <IconButton
@@ -332,7 +334,7 @@ const ButtonContainer = ({
           surplus={surplus}
           payDayDate={payDayDate}
           icon={SunIcon}
-          label='Set Daily'
+          label='Set Daily Expenses'
           onClick={() => handleOpenDialog('daily')}
         />
         <IconButton
@@ -348,7 +350,7 @@ const ButtonContainer = ({
           surplus={surplus}
           payDayDate={payDayDate}
           icon={ChecklistIcon}
-          label='Daily'
+          label='Daily Expenses'
           onClick={handleOpenDailyDialog}
         />
         <IconButton
@@ -356,7 +358,7 @@ const ButtonContainer = ({
           surplus={surplus}
           payDayDate={payDayDate}
           icon={CalendarIcon}
-          label='Set Date'
+          label='Set Payday Date'
           onClick={() => handleOpenDialog('payDayDate')}
         />
       </div>
