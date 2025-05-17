@@ -342,7 +342,7 @@ const ButtonContainer = ({
           surplus={surplus}
           payDayDate={payDayDate}
           icon={ChecklistIcon}
-          label='Export'
+          label='Export Data'
           onClick={handleExport}
         />
         <IconButton
