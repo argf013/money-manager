@@ -7,7 +7,7 @@ manage their personal finances effectively. The application allows tracking
 expenses, calculating balances, and providing estimates on whether the user's
 balance is sufficient until the next payday.
 
-<img alt="Mana Plan Screenshot" src="https://via.placeholder.com/600x400?text=Mana+Plan+Screenshot">
+<img alt="Mana Plan Screenshot" src="[https://via.placeholder.com/600x400?text=Mana+Plan+Screenshot](https://github.com/argf013/money-manager/blob/master/mana-manager.netlify.app_(iPhone%20SE).png?raw=true)">
 
 ## Key Features
 
