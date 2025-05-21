@@ -104,7 +104,7 @@ The project was developed following modern best practices:
 
 ## Live Demo
 
-[Mana Plan Web Application](https://github.com/argf013/money-manager)
+[Mana Plan Web Application](https://mana-manager.netlify.app/)
 
 ## Future Enhancements
 
