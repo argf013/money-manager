@@ -105,16 +105,3 @@ The project was developed following modern best practices:
 ## Live Demo
 
 [Mana Plan Web Application](https://mana-manager.netlify.app/)
-
-## Future Enhancements
-
-- Budget categorization and analytics
-- Expense patterns and insights
-- Multi-currency support
-- Cloud synchronization
-- Financial goal setting and tracking
-
-This project demonstrates my expertise in building complex, user-focused web
-applications with React, TypeScript, and modern frontend technologies. It
-showcases my ability to create performant PWAs with offline capabilities and
-intuitive user interfaces.
